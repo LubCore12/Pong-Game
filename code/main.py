@@ -18,8 +18,9 @@ class Game:
         self.setup_sprited()
 
     def setup_sprited(self):
+        ball = Ball(self.all_sprites, self.paddle_sprites)
         Player((self.all_sprites, self.paddle_sprites))
-        Ball(self.all_sprites, self.paddle_sprites)
+        Opponent((self.all_sprites, self.paddle_sprites), ball)
 
     def run(self):
         while self.running:
