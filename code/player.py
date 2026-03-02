@@ -9,8 +9,8 @@ class Player(pygame.sprite.Sprite):
 
         self.image = pygame.Surface(SIZE['paddle'], flags=pygame.SRCALPHA)
         pygame.draw.rect(self.image, COLORS['paddle'], pygame.FRect((0, 0), SIZE['paddle']), 0, 5)
-
         self.rect = self.image.get_frect(center=POS['player'])
+        self.old_rect = self.rect.copy()
 
         self.direction = 0
 
@@ -24,5 +24,6 @@ class Player(pygame.sprite.Sprite):
         self.direction = int(keys[pygame.K_s]) - int(keys[pygame.K_w])
 
     def update(self, delta_time):
+        self.old_rect = self.rect.copy()
         self.get_direction()
         self.move(delta_time)
