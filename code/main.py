@@ -15,10 +15,30 @@ class Game:
         self.all_sprites = pygame.sprite.Group()
         self.paddle_sprites = pygame.sprite.Group()
 
+        self.score = {
+            'player': 0,
+            'opponent': 0
+        }
+        self.font = pygame.font.Font(None, 160)
+
         self.setup_sprited()
 
+    def display_score(self):
+        player_surf = self.font.render(str(self.score['player']), True, COLORS['bg detail'])
+        player_rect = player_surf.get_frect(center = (WINDOW_WIDTH / 2 + 100, WINDOW_HEIGHT / 2))
+        self.display_screen.blit(player_surf, player_rect)
+
+        opponent_surf = self.font.render(str(self.score['opponent']), True, COLORS['bg detail'])
+        opponent_rect = opponent_surf.get_frect(center=(WINDOW_WIDTH / 2 - 100, WINDOW_HEIGHT / 2))
+        self.display_screen.blit(opponent_surf, opponent_rect)
+
+        pygame.draw.line(self.display_screen, COLORS['bg detail'], (WINDOW_WIDTH / 2, 0), (WINDOW_WIDTH / 2, WINDOW_HEIGHT), 7)
+
+    def update_score(self, side):
+        self.score[side] += 1
+
     def setup_sprited(self):
-        ball = Ball(self.all_sprites, self.paddle_sprites)
+        ball = Ball(self.all_sprites, self.paddle_sprites, self.update_score)
         Player((self.all_sprites, self.paddle_sprites))
         Opponent((self.all_sprites, self.paddle_sprites), ball)
 
@@ -32,6 +52,7 @@ class Game:
 
             self.all_sprites.update(delta_time)
             self.display_screen.fill(COLORS['bg'])
+            self.display_score()
             self.all_sprites.draw(self.display_screen)
 
             pygame.display.update()
