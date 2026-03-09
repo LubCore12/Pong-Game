@@ -1,6 +1,9 @@
+import json
+
 from settings import *
 from player import *
 from ball import *
+import json
 
 class Game:
     def __init__(self):
@@ -15,10 +18,15 @@ class Game:
         self.all_sprites = pygame.sprite.Group()
         self.paddle_sprites = pygame.sprite.Group()
 
-        self.score = {
-            'player': 0,
-            'opponent': 0
-        }
+        try:
+            with open(join('data', 'score.json'), 'r', encoding="utf-8") as score_file:
+                self.score = json.load(score_file)
+        except FileNotFoundError:
+            self.score = {
+                'player': 0,
+                'opponent': 0
+            }
+
         self.font = pygame.font.Font(None, 160)
 
         self.setup_sprited()
@@ -49,6 +57,9 @@ class Game:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
+
+                    with open(join('data', 'score.json'), 'w', encoding="utf-8") as score_file:
+                        json.dump(self.score, score_file )
 
             self.all_sprites.update(delta_time)
             self.display_screen.fill(COLORS['bg'])
