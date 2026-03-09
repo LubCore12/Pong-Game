@@ -11,10 +11,14 @@ class Ball(pygame.sprite.Sprite):
         self.rect = self.image.get_frect(center=(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2))
         self.old_rect = self.rect.copy()
 
+        self.speed_modifier = 0
         self.direction = pygame.Vector2(choice((-1, 1)), uniform(0.7, 0.8) * choice((-1, 1)))
 
         self.paddle_sprites = paddle_sprites
         self.update_score = update_score
+
+        self.start_time = pygame.time.get_ticks()
+        self.duration = 500
 
     def collision(self, direction):
         for sprite in self.paddle_sprites:
@@ -35,9 +39,9 @@ class Ball(pygame.sprite.Sprite):
                         self.direction.y *= -1
 
     def move(self, delta_time):
-        self.rect.x += self.direction.x * SPEED['ball'] * delta_time
+        self.rect.x += self.direction.x * SPEED['ball'] * delta_time * self.speed_modifier
         self.collision('horizontal')
-        self.rect.y += self.direction.y * SPEED['ball'] * delta_time
+        self.rect.y += self.direction.y * SPEED['ball'] * delta_time * self.speed_modifier
         self.collision('vertical')
 
         self.wall_collision()
@@ -56,7 +60,12 @@ class Ball(pygame.sprite.Sprite):
     def reset(self):
         self.rect.center = (WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2)
         self.direction = pygame.Vector2(choice((-1, 1)), uniform(0.7, 0.8) * choice((-1, 1)))
+        self.start_time = pygame.time.get_ticks()
+
+    def timer(self):
+        self.speed_modifier = 1 if pygame.time.get_ticks() - self.start_time >= self.duration else 0
 
     def update(self, delta_time):
         self.old_rect = self.rect.copy()
+        self.timer()
         self.move(delta_time)
