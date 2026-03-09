@@ -8,6 +8,10 @@ class Ball(pygame.sprite.Sprite):
 
         self.image = pygame.Surface(SIZE['ball'], flags=pygame.SRCALPHA)
         pygame.draw.circle(self.image, COLORS['ball'], (SIZE['ball'][0] / 2, SIZE['ball'][1] / 2), SIZE['ball'][0] / 2)
+
+        self.shadow_surf = self.image.copy()
+        pygame.draw.circle(self.shadow_surf, COLORS['ball shadow'], (SIZE['ball'][0] / 2, SIZE['ball'][1] / 2), SIZE['ball'][0] / 2)
+
         self.rect = self.image.get_frect(center=(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2))
         self.old_rect = self.rect.copy()
 

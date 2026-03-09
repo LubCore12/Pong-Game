@@ -3,6 +3,7 @@ import json
 from settings import *
 from player import *
 from ball import *
+from groups import *
 import json
 
 class Game:
@@ -15,7 +16,7 @@ class Game:
         self.clock = pygame.time.Clock()
         self.running = True
 
-        self.all_sprites = pygame.sprite.Group()
+        self.all_sprites = AllSprites()
         self.paddle_sprites = pygame.sprite.Group()
 
         try:
@@ -64,7 +65,7 @@ class Game:
             self.all_sprites.update(delta_time)
             self.display_screen.fill(COLORS['bg'])
             self.display_score()
-            self.all_sprites.draw(self.display_screen)
+            self.all_sprites.draw()
 
             pygame.display.update()
 
